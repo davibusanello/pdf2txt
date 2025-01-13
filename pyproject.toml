@@ -1,5 +1,5 @@
 [project]
-name = "pdf-to-text"
+name = "pdf2txt"
 version = "0.1.0"
 description = "A quick tool to convert PDF files to text"
 readme = "README.md"
@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-pdf-to-text = "src.pdf_to_text:main"
+pdf2txt = "src.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]

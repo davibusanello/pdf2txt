@@ -1,4 +1,4 @@
-# PDF to Text Converter
+# PDF to Text Converter (pdf2txt)
 
 A Python-based tool that converts PDF files to text using OCR (Optical Character Recognition) technology.
 
@@ -24,8 +24,8 @@ A Python-based tool that converts PDF files to text using OCR (Optical Character
 3. Clone the repository:
 
    ```bash
-   git clone https://github.com/davibusanello/pdf-to-text.git
-   cd pdf-to-text
+   git clone https://github.com/davibusanello/pdf2txt.git
+   cd pdf2txt
    ```
 
 4. Create and activate a virtual environment with UV:
@@ -48,9 +48,9 @@ A Python-based tool that converts PDF files to text using OCR (Optical Character
 To enable shell completion (for bash/zsh), add this to your shell's rc file (~/.bashrc, ~/.zshrc):
 
 ```bash
-eval "$(register-python-argcomplete $(which pdf-to-text))"
+eval "$(register-python-argcomplete $(which pdf2txt))"
 # or with explicit path
-eval "$(register-python-argcomplete /path/to/your/virtual/env/bin/pdf-to-text)"
+eval "$(register-python-argcomplete /path/to/your/virtual/env/bin/pdf2txt)"
 ```
 
 After setting up completion, you can use TAB to:
@@ -68,16 +68,16 @@ After setting up completion, you can use TAB to:
 
 ```bash
 # Basic usage (default 4 threads and 3 pages per thread)
-uv run pdf-to-text input.pdf output.txt
+uv run pdf2txt input.pdf output.txt
 
 # With wildcards
-uv run pdf-to-text "documents/*.pdf" outputs.txt
+uv run pdf2txt "documents/*.pdf" outputs.txt
 
 # Changing threads and chunk size
-uv run pdf-to-text input.pdf output.txt --max-threads 8 --chunk-size 5
+uv run pdf2txt input.pdf output.txt --max-threads 8 --chunk-size 5
 
 # Help
-uv run pdf-to-text --help
+uv run pdf2txt --help
 ```
 
 When using wildcards with multiple input files, each output will be named as `output_filename.txt` where filename is the name of the input PDF.
