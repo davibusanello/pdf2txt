@@ -51,8 +51,16 @@ A Python-based tool that converts PDF files to text using OCR (Optical Character
 
 ## Usage
 
+Basic usage default 4 threads and 3 pages per thread:
+
 ```bash
 uv run pdf-to-text.py <input_pdf_file> <output_text_file>
+```
+
+Changing the number of threads and page chunk size:
+
+```bash
+uv run pdf-to-text.py <input_pdf_file> <output_text_file> --max-threads 8 --chunk-size 5
 ```
 
 ## License
