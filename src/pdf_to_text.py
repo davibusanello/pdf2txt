@@ -4,6 +4,9 @@ import pytesseract
 from concurrent.futures import ThreadPoolExecutor
 from typing import List
 from PIL import Image
+import os
+import glob
+import argcomplete
 
 def process_page_chunk(pages: List[Image.Image]) -> str:
     """Process a chunk of pages and return combined text."""
@@ -43,20 +46,44 @@ def pdf_to_text(pdf_file: str, output_file: str, max_threads: int = 4, chunk_siz
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(final_text)
 
+def pdf_completer(prefix, parsed_args, **kwargs):
+    """Complete PDF files in current directory"""
+    return (f for f in glob.glob(prefix + '*') if f.lower().endswith('.pdf'))
+
+def dir_completer(prefix, parsed_args, **kwargs):
+    """Complete directories and text files"""
+    return (f for f in glob.glob(prefix + '*') if os.path.isdir(f) or f.lower().endswith('.txt'))
+
 def main():
     parser = argparse.ArgumentParser(description="Convert PDF to Text")
-    parser.add_argument('pdf_file', type=str, help='Path to the input PDF file')
-    parser.add_argument('output_file', type=str, help='Path to the output text file')
+    parser.add_argument('pdf_file', type=str, help='Path to the input PDF file (supports wildcards)').completer = pdf_completer
+    parser.add_argument('output_file', type=str, help='Path to the output text file').completer = dir_completer
     parser.add_argument('--max-threads', type=int, default=4,
                       help='Maximum number of threads to use (default: 4)')
     parser.add_argument('--chunk-size', type=int, default=3,
                       help='Number of pages to process per thread (default: 3)')
 
+    argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    pdf_to_text(args.pdf_file, args.output_file,
-                max_threads=args.max_threads,
-                chunk_size=args.chunk_size)
-    print(f'Text extracted and saved to {args.output_file}')
+
+    # Expand file path
+    pdf_files = glob.glob(os.path.expanduser(args.pdf_file))
+    if not pdf_files:
+        print(f"No files found matching: {args.pdf_file}")
+        return
+
+    # If multiple files are selected, adjust output filename
+    for pdf_file in pdf_files:
+        if len(pdf_files) > 1:
+            base_name = os.path.splitext(os.path.basename(pdf_file))[0]
+            output_file = f"{os.path.splitext(args.output_file)[0]}_{base_name}.txt"
+        else:
+            output_file = args.output_file
+
+        pdf_to_text(pdf_file, output_file,
+                    max_threads=args.max_threads,
+                    chunk_size=args.chunk_size)
+        print(f'Text extracted and saved to {output_file}')
 
 if __name__ == '__main__':
     main()
